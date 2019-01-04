@@ -8,6 +8,7 @@ class Login extends React.Component {
     password: '',
     errors: [],
     loading: false,
+    visible: true
   }
   handleOnchange = event => this.setState({ [event.target.name]: event.target.value });
 
@@ -59,9 +60,12 @@ class Login extends React.Component {
     ) ?
       "input-error" : "";
   }
+  passwordType = () => {
+    this.setState({visible:!this.state.visible})
+  }
 
   render() {
-    const { email, password, errors } = this.state;
+    const { email, password, errors, visible } = this.state;
     return (
       <div className="container register">
         <div className="row">
@@ -93,12 +97,12 @@ class Login extends React.Component {
 
                       </div>
                       <div className="input-group mb-3">
-                        <div className="input-group-prepend">
+                        <div className="input-group-prepend" onClick={this.passwordType}>
                           <span className={`input-group-text ${this.handleInputErrors(errors, "password")}`}>
-                            <i className="fa fa-eye-slash" aria-hidden="true"></i></span>
+                            <i className={`${visible ? "fa fa-eye-slash" : "fa fa-eye"}`} aria-hidden="true"></i></span>
                         </div>
                         <input
-                          type="password"
+                          type={`${visible ? "password" : "text"}`}
                           className={`form-control ${this.handleInputErrors(errors, "password")}`}
                           placeholder="Password"
                           autoComplete="true"
@@ -121,7 +125,7 @@ class Login extends React.Component {
                 </div>
               )
               }
-              
+
               <div className="card-footer">
                 <p className="text-center">Not have an account.?<Link to="/register">Register</Link></p>
               </div>
