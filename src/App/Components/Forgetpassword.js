@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import firebase from '../Firebase/Firebase'
+import firebase from '../Firebase/Firebase';
+import {Link} from 'react-router-dom'
 
 export default class Forgetpassword extends Component {
     state = {
@@ -52,7 +53,7 @@ export default class Forgetpassword extends Component {
                     <div className="col-md-6">
                         <div className="card mt-8">
                             <div className="card-header">
-                                <h1 className="text-center text-primary">Forget password</h1>
+                                <h2 className="text-center text-primary">Forget password</h2>
                             </div>
                             <div className="card-body">
                                 <div className="row">
@@ -87,6 +88,9 @@ export default class Forgetpassword extends Component {
                                 </div>
                             )
                             }
+                            <div className="card-footer">
+                            <p className="text-center">Back to <Link to="/login">Login..?</Link></p>
+                            </div>
                         </div>
                     </div>
                 </div>
