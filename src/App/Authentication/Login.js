@@ -8,7 +8,8 @@ class Login extends React.Component {
     password: '',
     errors: [],
     loading: false,
-    visible: true
+    visible: true,
+    usersRef:firebase.database().ref('users')
   }
   handleOnchange = event => this.setState({ [event.target.name]: event.target.value });
 
@@ -61,7 +62,42 @@ class Login extends React.Component {
       "input-error" : "";
   }
   passwordType = () => {
-    this.setState({visible:!this.state.visible})
+    this.setState({ visible: !this.state.visible })
+  }
+
+  handleGoogleLogin = () => {
+    console.log("google")
+    const googleProvider = new firebase.auth.GoogleAuthProvider()
+    firebase
+      .auth()
+      .signInWithPopup(googleProvider)
+      .then((createUser) => {
+        this.saveUser(createUser).then(() => {
+          console.log("user saved successfully")
+        })
+      }).catch(err => {
+        console.log(err)
+      })
+  }
+  handleGithubLogin = () => {
+    console.log("git hub")
+    const githubProvider = new firebase.auth.GithubAuthProvider()
+    firebase
+      .auth()
+      .signInWithPopup(githubProvider)
+      .then((createUser) => {
+        this.saveUser(createUser).then(() => {
+          console.log("user saved successfully")
+        })
+      }).catch(err => {
+        console.log(err)
+      })
+  }
+  saveUser = createUser => {
+    return this.state.usersRef.child(createUser.user.uid).set({
+      name: createUser.user.displayName,
+      avatar: createUser.user.photoURL
+    })
   }
 
   render() {
@@ -112,9 +148,16 @@ class Login extends React.Component {
                         />
 
                       </div>
-                      <button type="submit" className="btn btn-primary">Submit</button>
+                      <button type="submit" className="btn btn-primary btn-block">Submit</button>
                     </form>
-                    <Link to="forgetpassword">forgetpassword?</Link>
+                    <Link to="forgetpassword" className="mt-2">forgetpassword?</Link>
+                    <div className="mt-4">
+                      <button type="submit" className="btn btn-outline-secondary btn-block" onClick={this.handleGoogleLogin}>
+                        <i className="fa fa-google pr-2"></i>Google</button>
+
+                      <button type="submit" className="btn btn-outline-secondary btn-block" onClick={this.handleGithubLogin}>
+                        <i class="fa fa-github pr-2" aria-hidden="true"></i>Github</button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -125,6 +168,7 @@ class Login extends React.Component {
                 </div>
               )
               }
+
 
               <div className="card-footer">
                 <p className="text-center">Not have an account.?<Link to="/register">Register</Link></p>
